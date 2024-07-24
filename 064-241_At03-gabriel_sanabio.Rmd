@@ -1,0 +1,566 @@
+---
+title: "064-241_At03-gabriel_sanabio"
+output: html_document
+date: "2024-06-07"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1- Na primeira questão, iremos resolver o sistema linear pedido. Mas antes, determinaremos se ele ele tem solução única, se é indeterminado ou impossível.Para isso, calculamos o determinante da matriz. Se o determinante diferir de zero, ele é possível e determinado, se ele for igual a zero ele é possível mas indeterminado, e se o determinante principal for igual a zeroe o secundário diferir de zero, ele é impossível. Dessa forma, temos:
+
+
+```{r}
+
+left_part <- matrix(c(1, 2, 5, 2, 5, 7, 3, 9, 8), nrow = 3)
+left_part
+
+right_part <- matrix(c(20, 100, 200))
+right_part
+
+det(left_part)
+
+
+resultado <- solve(left_part, right_part)
+resultado
+```
+Primeiramente, observamos que o sistema tem solução única, visto que o determinante principal difere de zero. Após isso, observamos a resolução desse sistema, como visto acima.
+
+
+2-Fatores. Exercícios expressos: 
+
+a)Se z <- factor(c("p", "q", "p", "r", "q")) e os níveis 
+de z forem "p", "q", "r", escreva um comando em R que troque o 
+nível "p" para "w", de maneira que z seja igual a: "w", "q", "w", 
+"r", "q". 
+
+```{r}
+
+z <- factor(c("p", "q", "p", "r", "q"))
+z
+
+levels(z)[levels(z) == "p"] <- "w"
+z
+
+
+```
+b)Execute os comandos abaixo e crie os fatores s1 e s2 por meio de um 
+sorteio com reposição das letras do alfabeto. Antes verifique o que o 
+comando sample() faz. Brinque um pouco com ele. 
+set.seed(666) 
+s1 <- factor(sample(letters, size=5, replace=TRUE)) 
+s2 <- factor(sample(letters, size=5, replace=TRUE)) 
+
+```{r}
+set.seed(666) 
+s1 <- factor(sample(letters, size=5, replace=TRUE)) 
+s2 <- factor(sample(letters, size=5, replace=TRUE)) 
+s1
+s2
+
+v_concatenado <- factor(c(as.character(s1), as.character(s2)))
+
+v_concatenado
+```
+c)Considere o conjunto de dados íris e use a função cut() e categorize 
+a variável Sepal.Length, criando o seguinte fator com cinco níveis, 
+referentes aos intervalos: (4.3, 5.02], (5.02, 5.74], (5.74, 6.46],
+(6.46, 7.18] e (7.18, 7.9], com frequência em cada intervalo de 32,
+41, 42, 24 e 11, respectivamente. Confira.  
+
+Para conferir, faremos uma tabela.
+
+```{r}
+data(iris)
+
+breaks <- c(4.3, 5.02, 5.74, 6.46, 7.18, 7.9)
+
+iris$Sepal.Length.Category <- cut(iris$Sepal.Length, breaks=breaks, include.lowest=TRUE)
+
+table(iris$Sepal.Length.Category)
+
+```
+d)Considere novamente o conjunto de dados iris. Gere uma tabela de 
+contingência com duas linhas e três colunas. As linhas devem estar 
+relacionadas com a variável Sepal.length (< 5: TRUE ou FALSE) e 
+as colunas, com o fator Species. A saída deverá ser a seguinte: 
+setosa versicolor virginica 
+FALSE     30         49        49 
+TRUE      20          1         1 
+
+```{r}
+iris$Sepal.Length.menorque5 <- iris$Sepal.Length < 5
+
+tabela_contingencia <- table(iris$Sepal.Length.menorque5, iris$Species)
+
+print(tabela_contingencia)
+```
+e)Considere o fator respostas <- factor(c("Concordo", "Concordo", 
+"Concordo fortemente", "Discordo", "Concordo")), com a seguinte 
+saída: 
+[1] Concordo     Concordo          Concordo fortemente 
+[4] Discordo     Concordo            
+Levels: Concordo Concordo fortemente Discordo 
+
+Mais tarde percebeu-se que existe um novo nível, “Discordo 
+fortemente”. Use comando em R para incluir “Discordo 
+fortemente” como um novo nível de tributo do fator, fornecendo a 
+seguinte saída: 
+[1] Concordo       Concordo       Concordo fortemente 
+[4] Discordo       Concordo            
+Levels: 
+Concordo fortemente Concordo Discordo fortemente Discordo 
+
+```{r}
+respostas <- factor(c("Concordo", "Concordo", 
+"Concordo fortemente", "Discordo", "Concordo"))
+respostas
+
+levels(respostas) <- c(levels(respostas), "Discordo fortemente")
+
+respostas <- factor(respostas, levels = c("Concordo fortemente", "Concordo", "Discordo", "Discordo fortemente"))
+
+print(respostas)
+levels(respostas)
+
+
+```
+f)Se x <- factor(c("alto", "baixo", "médio", 
+"alto", "alto", "baixo", "médio")), use comando em R 
+para os valores numéricos dos vários níveis de x, apresentando a 
+seguintes saída: 
+levels     value 
+1   alto     1 
+2  baixo     2 
+3  médio     3 
+
+```{r}
+x <- factor(c("alto", "baixo", "médio", "alto", "alto", "baixo", "médio"))
+
+levels_x <- levels(x)
+
+levels_table <- data.frame(levels = levels_x, value = seq_along(levels_x))
+
+print(levels_table)
+
+
+```
+3- Listas. Exercícios expressos: 
+
+a)Se: p <– c(2, 7, 8), q <– c(“A”,  “B”,  “C”) e x <-list(p,  q), qual o valor de x[2]? 
+
+```{r}
+p <- c(2, 7, 8)
+
+q <- c("A", "B", "C")
+
+x <- list(p, q)
+
+x[2]
+```
+b)Se: w <– c(2, 7, 8), v <– c(“A”,  “B”,  “C”) e x <-list(w,  v), qual código em R substituirá “A” em x por “K”? 
+
+
+```{r}
+
+w <- c(2, 7, 8)
+v <- c("A", "B", "C")
+x <- list(w, v)
+index <- which(x[[2]] == "A")
+x[[2]][index] <- "K"
+print(x)
+
+```
+c)Se: a <– list(“x” = 5, “y” = 10, “z” = 15), qual código em R 
+dará a soma de todos os elementos de a? 
+
+```{r}
+
+a <- list("x" = 5, "y" = 10, "z" = 15)
+
+s <- sum(as.numeric(a))
+print(s)
+
+```
+d)Se: nova <– list(a = 1:10, b = “Férias” , c = “Olá”), 
+escreva código em R que adicionaria 1 a cada elemento do primeiro 
+vetor em nova.
+
+```{r}
+nova <- list(a = 1:10, b = "Férias" , c = "Olá")
+
+nova$a <- nova$a + 1
+
+print(nova)
+
+```
+e)Se: b <– list(a = 1:10, c = “Olá”, d = “AA”), escreva 
+código em R que dê todos os elementos de b, exceto o segundo 
+elemento, do primeiro vetor de b.
+
+```{r}
+
+b <- list(a  = 1:10, c = "Olá", d = "AA")
+resposta <- b$a[-2]
+print(resposta)
+
+```
+
+
+f)Seja x <– list(a = 5:10, c = “Olá”, d = “AA”), escreva 
+código em R para acrescentar um novo item z à lista x,  com 
+z = “Novo item”.
+
+```{r}
+
+x <- list(a = 5:10, c = "Olá", d = "AA")
+
+x$z <- "Novo item"
+
+print(x)
+```
+g)Considere y <– list(1:10, “string”, 666), escreva código em 
+R que atribua novos nomes, “um”, “dois”, “três”, aos elementos de 
+y. 
+
+```{r}
+
+y <- list(1:10, "string", 666)
+
+names(y) <- c("um", "dois", "três")
+
+print(y)
+
+```
+h)Se: x <– list(y = 1:10, t = “Olá”, f = “TT” , r = 5:20), 
+escreva código em R que dê o comprimento do vetor r, de x.
+
+```{r}
+x <- list(y = 1:10, t = "Olá", f = "TT", r = 5:20)
+
+comprimento <- length(x$r)
+
+print(comprimento)
+```
+4-Data frame. Crie os data frames indicados abaixo: 
+
+
+df.A <- data.frame(var1 = 1:5,  var2 = LETTERS[1:5]) 
+df.B <- data.frame(var1 = 6:10, var2 = LETTERS[6:10]) 
+var3 <- 11:20 
+
+```{r}
+df.A <- data.frame(var1 = 1:5,  var2 = LETTERS[1:5]) 
+df.B <- data.frame(var1 = 6:10, var2 = LETTERS[6:10]) 
+var3 <- 11:20
+
+```
+
+a)Crie o data frame df.res a partir da vinculação por linhas de df.A e 
+df.B. 
+
+```{r}
+df.res <- rbind(df.A, df.B)
+
+print(df.res)
+```
+b)Apresente a classe de cada coluna (por exemplo, número inteiro, 
+caractere, fator etc.). 
+
+```{r}
+classes <- sapply(df.res, class)
+
+print(classes)
+```
+c)Construa df.A2 conforme indicado abaixo e o vincule por linhas com 
+df.B. Comente o resultado obtido. Por que? 
+df.A2 <- data.frame(var1 = 1:6,  var2 = LETTERS[1:6])
+
+```{r}
+
+df.A2 <- data.frame(var1 = 1:6,  var2 = LETTERS[1:6])
+
+df.res2 <- rbind(df.A2, df.B)
+
+print(df.res2)
+
+```
+Nesse caso, o número 6 e a letra F aparecem duas vezes, já que é no sexto índice que há coincidência entre df.A2 e df.B.
+
+
+d)Use o comando cbind() para adicionar o vetor var3 como uma nova 
+variável de df.res. 
+
+```{r}
+
+df.res <- cbind(df.res, var3)
+
+print(df.res)
+
+```
+e)Rearranje colunas desse data frame, de seguinte maneira que elas 
+fiquem na seguinte ordem: var1, var3, var2. 
+
+```{r}
+
+df.res <- df.res[, c("var1", "var3", "var2")]
+print(df.res)
+
+```
+5- Data frame. Considere o conjunto de dados state.x77{datasets}.
+
+a)Verifique se o objeto state.x77 é um data frame, caso contrário, 
+transforme-o para um data frame. 
+
+```{r}
+
+is.data.frame(state.x77)
+
+state.x77 <- as.data.frame(state.x77)
+ 
+is.data.frame(state.x77) 
+```
+Primeiro, verificamos que state.x77 não era um data frame.Então, transformamos em data frame e depois verificamos novamente, retornando TRUE, ou seja, a transformação está correta, e agora state.x77 é um data frame.
+
+
+b)Determine quantos estados têm uma renda inferior a 4300. 
+
+```{r}
+
+names(state.x77)
+
+renda_inferior_4300 <- state.x77[state.x77$Income < 4300, ]
+
+numero_estados <- nrow(renda_inferior_4300)
+
+numero_estados
+
+```
+c)Determine qual é o estado com maior renda. 
+
+```{r}
+
+names_data <- data.frame(names = rownames(state.x77), state.x77)
+
+estado_maior_renda <- names_data[names_data$Income == max(names_data$Income), ]
+
+estado_maior_renda$names
+```
+d)Construa o data frame state com os conjuntos de dados state.abb, state.area, state.division, state.name, state.region. Os nomes das linhas devem ser os nomes dos estados.
+
+
+```{r}
+state <- data.frame(
+  state.abb,
+  state.area,
+  state.division,
+  state.name,
+  state.region
+  
+)
+
+print(state)
+```
+e)Construa o data frame estados, adicionando, por coluna, o data frame 
+state.x77 ao objeto states. 
+
+
+```{r}
+estados <- cbind(state, state.x77)
+
+print(estados)
+
+```
+f)Renomeie os nomes das variáveis utilizando apenas as 3 primeiras letras 
+após o ponto final dos nomes originais (por exemplo, States.abb 
+será denominada abb).
+
+
+```{r}
+
+rename_columns <- function(colnames) {
+  sapply(colnames, function(name) {
+    parts <- unlist(strsplit(name, "\\."))
+    if (length(parts) > 1) {
+      return(substr(parts[2], 1, 3)) 
+    } else {
+      return(substr(name, 1, 3)) 
+    }
+  })
+}
+
+new_colnames <- rename_columns(colnames(estados))
+colnames(estados) <- new_colnames
+
+print(estados)
+```
+g)Remova a variável div.
+
+```{r}
+
+estados$div <- NULL
+
+print(estados)
+```
+h)Construa estados.a, um subconjunto de estados, através da 
+remoção das variáveis Life Exp, HS Grad, Frost, abb e are. 
+
+```{r}
+
+estados.a <- estados[, (names(estados) %in% c("Lif", "HS ", "Fro", "abb", "are"))]
+estados <- estados[, !(names(estados) %in% c("Lif", "HS ", "Fro", "abb", "are"))]
+
+
+print(estados)
+
+print(estados.a)
+
+```
+i)Categorize a variável Illiteracy, em níveis de analfabetismo:  
+baixo, para valores no intervalo [0,1); algum, no intervalo [1,2) 
+e alto, no intervalo [2, inf). Adicione essa variável ao data frame 
+estados. 
+
+```{r}
+
+as.numeric(estados$Ill)
+
+intervals <- c(0, 1, 2, Inf)
+labels <- c("baixo", "algum", "alto")
+
+estados$Ill <- cut(estados$Ill, breaks = intervals, labels = labels, right = FALSE)
+
+
+print(estados)
+```
+j)Determine o estado com maior renda na região oeste e que tenha baixo 
+analfabetismo. Qual é o valor dessa renda? 
+
+```{r}
+maior <- 0
+
+length(estados$Ill)
+
+for(i in 1:50){
+  
+  if(estados$reg[i] == "West" && estados$Ill[i] == "baixo"){
+    if(estados$Inc[i] > maior){
+      maior <- estados$Inc[i]
+      nome <- estados$nam[i]
+    }
+  }
+}
+cat("O estado do Oeste cujo índice de analfabetismo é baixo com a maior renda é",nome,",com uma renda de",maior,".")
+
+```
+6- Seja o array Titanic{datasets}, com o qual já trabalhamos em sala. 
+Sempre que julgar conveniente, use transformação e visualização de dados para 
+responder as questões abaixo:
+
+a)Segundo a Wikipedia, havia cerca de 2.224 passageiros e tripulantes a 
+bordo do Titanic quando ele afundou. Para quantos deles temos 
+informações neste conjunto de dados? Das pessoas para as quais temos 
+dados, quantas sobreviveram e quantas não? Qual é a taxa de 
+sobrevivência global?
+
+```{r}
+is.data.frame(Titanic)
+
+Titanic_df <- as.data.frame(as.table(Titanic))
+sobreviventes <- Titanic_df$Freq[Titanic_df$Survived == "Yes"]
+mortos <- Titanic_df$Freq[Titanic_df$Survived == "No"]
+
+sobreviventes <- sum(sobreviventes)
+mortos <- sum(mortos)
+total_passageiros <- sum(Titanic)
+taxa_sobrevivencia <- (sobreviventes/total_passageiros) * 100 
+
+cat("Segundo o dataset Titanic, haviam",total_passageiros,"passageiros no Titanic.",sobreviventes,"sobreviveram ao acidente, e", mortos,"faleceram.Ou seja, o acidente possui uma taxa de sobrevivência igual a",taxa_sobrevivencia,"%.")
+```
+b)Quantos passageiros do Titanic eram homens e quantos eram mulheres? 
+O que você encontra quando tabula por classe de bilhete?
+
+```{r}
+as.data.frame(Titanic_df)
+
+
+contagem_sexo <- xtabs(Freq ~ Sex, data = as.data.frame(Titanic))
+print(contagem_sexo)
+
+contagem_sexo_classe <- xtabs(Freq ~ Sex + Class, data = as.data.frame(Titanic))
+
+print(contagem_sexo_classe)
+
+
+```
+Quando tabulamos por classe de bilhete, observamos que a maioria esmagadora da terceira classe e da tripulação do Titanic eram compostas por homens.Já na segunda e terceira classe, os homens também são maioria, porém, a diferença não é tão grande.
+
+
+c)Quantos passageiros de cada sexo sobreviveram e quantos deles não 
+sobreviveram? Qual é a taxa de sobrevivência para passageiros por 
+sexo? 
+
+```{r}
+is.data.frame(Titanic_df)
+
+contagem_sexo_sobreviventes <- xtabs(Freq ~ Sex + Survived, data = Titanic_df)
+print(contagem_sexo_sobreviventes)
+
+freq_homens_sobreviventes <- (367 / 1731) * 100
+freq_mulheres_sobreviventes <- (344 / 470) *100
+
+print(freq_homens_sobreviventes)
+print(freq_mulheres_sobreviventes)
+
+```
+Analisando os dados, podemos concluir que 367 homens sobreviveram e 1364 morreram, sendo uma taxa de sobrevivência masculina igual a 21% aproximadamente. Já em relação às mulheres, concluímos que 344 sobreviveram e 126 morreram, sendo uma taxa de sobrevivência feminina igual à 73% aproximadamente.
+
+d)Mostre a distribuição de idade por classe de bilhete, por sexo. Comente 
+o que você encontrou? 
+
+```{r}
+
+idade_classe_bilhete <- xtabs(Freq ~ Age + Class + Sex, data = Titanic_df)
+
+print(idade_classe_bilhete)
+
+```
+Tanto no caso dos homens quanto no caso das mulheres, a terceira classe é onde havia maior presença de crianças.Também vale destacar que, entre os homens, há mais pessoas na tripulação do que em todas as outras classes somadas, enquanto, entre as mulheres, a tripulação é onde há menos pessoas.
+
+e)Como o sexo, a classe do bilhete e a idade de um passageiro afetaram 
+sua chance de sobrevivência? Tente usar um gráfico para responder a 
+esta pergunta. 
+
+```{r}
+
+library(ggplot2)
+
+data("Titanic")
+
+Titanic_df <- as.data.frame(Titanic)
+
+probabilidade_sobrevivencia <- aggregate(Freq ~ Sex + Class + Age, data = Titanic_df[Titanic_df$Survived == "Yes", ], FUN = sum)
+probabilidade_total <- aggregate(Freq ~ Sex + Class + Age, data = Titanic_df, FUN = sum)
+probabilidade_sobrevivencia <- merge(probabilidade_sobrevivencia, probabilidade_total, by = c("Sex", "Class", "Age"))
+probabilidade_sobrevivencia$Probabilidade <- probabilidade_sobrevivencia$Freq.x / probabilidade_sobrevivencia$Freq.y
+
+ggplot(probabilidade_sobrevivencia, aes(x = Class, y = Probabilidade, fill = Age)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~ Sex, scales = "free_y") +
+  labs(x = "Classe de Bilhete", y = "Probabilidade de Sobrevivência", fill = "Idade") +
+  ggtitle("Probabilidade de Sobrevivência por Sexo e Classe de Bilhete") +
+  theme_minimal()
+
+
+```
+
+
+
+
+
+
+
+
+
+
